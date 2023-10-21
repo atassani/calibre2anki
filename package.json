@@ -2,11 +2,11 @@
   "name": "calibre2anki",
   "version": "1.0.0",
   "description": "Extracts metadata and image covers from Calibre (that must be running) so that it can be installed in Anki using inka.",
-  "main": "generateMetadata.js",
+  "main": "generateMarkdown.js",
   "scripts": {
     "build": "tsc",
     "covers": "node dist/extractCalibreCovers.js",
-    "metadata": "node dist/generateMetadata.js",
+    "markdown": "node dist/generateMarkdown.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

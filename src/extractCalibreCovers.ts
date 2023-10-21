@@ -3,7 +3,11 @@ import { parse } from 'ts-command-line-args';
 import {buildFileName} from './filename';
 
 function copyFile(src: string, dst: string) {
-    fs.copyFileSync(src, dst);
+    try {
+        fs.copyFileSync(src, dst);
+    } catch(err) {
+        console.error('Error copying file ' + src + '. ' + err);
+    }
 }
 
 interface ExtractCalibreCoversArguments {

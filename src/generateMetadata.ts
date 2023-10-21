@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import { parse } from 'ts-command-line-args';
 import {buildFileName} from './filename';
 import {format} from 'date-fns';
 
@@ -29,36 +30,74 @@ function formatDate(dateStr: string, dateFormat: string): string {
     return formattedDate;
 }
 
-function appendBookMetadata(metadata: Array<string>, book: any, num: number) {
+function appendBookMarkdown(markdown: Array<string>, book: any, mapAnkiIds: Map<string, string>) {
     var readDate = formatDate(book['*readdate'], 'MMM y');
     var pubDate = formatDate(book.pubdate, 'y');
     var rating = (book.rating) ? `${'★'.repeat(book.rating/2)}${'☆'.repeat(5 - book.rating/2)}` : '';
     var comments = (book['*comments']) ? book['*comments'] : '';
 
-    var bookMetadata = 
-`
-${num}. Remember **${book.title.split(':', 1)}**?
+    const ankiId = mapAnkiIds.get(book.id.toString());
+    var bookMarkdown = 
+`${(ankiId) ? '\n' + ankiId : ''}
+${book.id}. Remember **${book.title.split(':', 1)}**?
 > _${book.authors}_
-> Published ${pubDate}
-> Format ${getBookFormatFromTags(book.tags)}
-> Read ${readDate}
+> Published: ${pubDate}
+> Format: ${getBookFormatFromTags(book.tags)}
+> Read: ${readDate}
 > ${rating}
+>
 > ![book.title](./images/${buildFileName(book.id, book.title)})
 > ${comments}
 
 `;
-    metadata.push(bookMetadata);
+    markdown.push(bookMarkdown);
 }
 
-async function generateMetadata() {
-    var data = JSON.parse(fs.readFileSync('./data/calibre_books.json', 'utf-8'));
-    var outFile = './output/calibre_metadata.md';
-    var metadata: Array<string> = ['\n\n', '---\n\n', 'Deck: CalibreBooks\n\n', 'Tags: books calibre\n\n'];
-    data.filter(b => (b.cover))
-        .map((b, i) => appendBookMetadata(metadata, b, i));
-    metadata.push( '---\n\n');
-
-    fs.writeFileSync(outFile, metadata.join(''));
+function generateMapAnkiIds(markdownFile: string): Map<string, string> {
+    var map = new Map<string, string>();
+    try {
+        const markdownContents = fs.readFileSync(markdownFile).toString().split('\n');
+        for (var i in markdownContents) {
+            const match = markdownContents[i].match(/^([0-9]*)\./);
+            if (match && markdownContents[parseInt(i)-1].length > 0) {
+                map.set(match[1], markdownContents[parseInt(i)-1]);
+            }
+        }
+    }
+    catch (err) { 
+        console.error(`File ${markdownFile} does not exist.`);
+    }
+    return map;
 }
 
-generateMetadata();
+interface GenerateMarkdownArguments {
+    sourceCalibreJson: string;
+    markdownTargetPath: string;
+    help?: boolean;
+}
+
+async function generateMarkdown() {
+    // npm run build && node dist/generateMetadata.js -j ./data/calibre_books.json -t ./output/calibre_markdown.md
+    const args = parse<GenerateMarkdownArguments>(
+        {
+            sourceCalibreJson: { type: String, optional: undefined, alias: 'j', description: 'Full path to the calibre.json file' },
+            markdownTargetPath: { type: String, optional: undefined, alias: 't', description: 'Full path to filename to store the markdown' },
+            help: { type: Boolean, optional: true, alias: 'h', description: 'Prints this usage guide' },    
+        },
+        {
+            helpArg: 'help',
+            headerContentSections: [{ header: 'Generate Markdown', content: 'From the JSON file provided as an argument, transforms it into a suitable markdown to be uploaded to Anki.' }],
+            footerContentSections: [{ header: 'Notes', content: `Generate the JSON file using calibre command line.` }],
+        },
+        );
+    var data = JSON.parse(fs.readFileSync(args.sourceCalibreJson, 'utf-8'));
+    var mapAnkiIds = generateMapAnkiIds(args.markdownTargetPath);
+    var markdown: Array<string> = ['\n\n', '---\n\n', 'Deck: CalibreBooks\n\n', 'Tags: books calibre\n\n'];
+    data.filter(book => (book.cover))
+        .map((book) => appendBookMarkdown(markdown, book, mapAnkiIds));
+    markdown.push( '---\n\n');
+
+    fs.writeFileSync(args.markdownTargetPath, markdown.join(''));
+}
+
+generateMarkdown();

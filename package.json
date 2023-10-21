@@ -1,0 +1,25 @@
+{
+  "name": "calibre2anki",
+  "version": "1.0.0",
+  "description": "Extracts metadata and image covers from Calibre (that must be running) so that it can be installed in Anki using inka.",
+  "main": "generateMetadata.js",
+  "scripts": {
+    "build": "tsc",
+    "covers": "node dist/extractCalibreCovers.js",
+    "metadata": "node dist/generateMetadata.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Toni Tassani",
+  "license": "ISC",
+  "dependencies": {
+    "date-fns": "^2.30.0",
+    "fs-extra": "^11.1.1",
+    "remove-accents": "^0.5.0",
+    "ts-command-line-args": "^2.5.1",
+    "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.6"
+  }
+}

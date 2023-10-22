@@ -115,12 +115,9 @@ function main() {
     // Invoke inka
     if (args.dontRunInka !== true) {
         console.log('Adding to Anki using inka');
-        console.log('export DISABLE_QT5_COMPAT=1 && ' +
-        'source /Users/toni.tassani/code/inka/venv/bin/activate && ' +
-        '/Users/toni.tassani/code/inka/venv/bin/inka collect ' + args.markdownTargetPath);
         exec('export DISABLE_QT5_COMPAT=1 && ' +
             'source /Users/toni.tassani/code/inka/venv/bin/activate && ' +
-            '/Users/toni.tassani/code/inka/venv/bin/inka collect ' + args.markdownTargetPath);
+            '/Users/toni.tassani/code/inka/venv/bin/inka collect --update-ids ' + args.markdownTargetPath);
     }
 }
 

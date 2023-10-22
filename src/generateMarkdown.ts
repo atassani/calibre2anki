@@ -1,7 +1,39 @@
 import * as fs from 'fs';
-import { parse } from 'ts-command-line-args';
 import {buildFileName} from './filename';
 import {format} from 'date-fns';
+
+export function cleanHtml(html: string): string {
+    var newHtml = html;
+    newHtml = newHtml.replace(/\n\s*/g, '\n');
+    newHtml = newHtml.replace(/\s*\n/g, '\n');
+    newHtml = newHtml.replace(/^\s*/g, '');
+    newHtml = newHtml.replace(/\s*$/g, '');
+    newHtml = newHtml.replace(/\<div\>/g, '');
+    newHtml = newHtml.replace(/<\/div>/g, '');
+    newHtml = newHtml.replace(/<p>/g, '');
+    newHtml = newHtml.replace(/<p [^>]*>/g, '');
+    newHtml = newHtml.replace(/<\/p>/g, '');
+    newHtml = newHtml.replace(/<span[^>]*>/g, '');
+    newHtml = newHtml.replace(/<\/span>/g, '');
+    newHtml = newHtml.replace(/<br\/>/g, '\n');
+    newHtml = newHtml.replace(/<br>/g, '\n');
+    newHtml = newHtml.replace(/<a href="([^\"]*)">([^<]*)<\/a>/g, '[$2]($1)');
+    newHtml = newHtml.replace(/<table[^>]*>/g, '');
+    newHtml = newHtml.replace(/<\/table>/g, '');
+    newHtml = newHtml.replace(/<tbody>/g, '');
+    newHtml = newHtml.replace(/<\/tbody>/g, '');
+    newHtml = newHtml.replace(/<tr>/g, '');
+    newHtml = newHtml.replace(/<\/tr>/g, '');
+    newHtml = newHtml.replace(/<td[^>]*>/g, '');
+    newHtml = newHtml.replace(/<\/td>/g, '');
+    newHtml = newHtml.replace(/<em>/g, '_');
+    newHtml = newHtml.replace(/<\/em>/g, '_');
+    newHtml = newHtml.replace(/\n\n/g, '\n');
+    newHtml = newHtml.replace(/^\n/, '');
+    newHtml = newHtml.replace(/\n/g, '\n> ');
+
+    return newHtml;
+}
 
 function getBookFormatFromTags(tags: Array<string>): string {
     var formats = [];
@@ -47,8 +79,8 @@ ${book.id}. Remember **${book.title.split(':', 1)}**?
 > ${rating}
 >
 > ![book.title](./images/${buildFileName(book.id, book.title)})
-> ${comments}
-
+>
+> ${cleanHtml(comments)}
 `;
     markdown.push(bookMarkdown);
 }
@@ -70,34 +102,13 @@ function generateMapAnkiIds(markdownFile: string): Map<string, string> {
     return map;
 }
 
-interface GenerateMarkdownArguments {
-    sourceCalibreJson: string;
-    markdownTargetPath: string;
-    help?: boolean;
-}
-
-async function generateMarkdown() {
-    // npm run build && node dist/generateMetadata.js -j ./data/calibre_books.json -t ./output/calibre_markdown.md
-    const args = parse<GenerateMarkdownArguments>(
-        {
-            sourceCalibreJson: { type: String, optional: undefined, alias: 'j', description: 'Full path to the calibre.json file' },
-            markdownTargetPath: { type: String, optional: undefined, alias: 't', description: 'Full path to filename to store the markdown' },
-            help: { type: Boolean, optional: true, alias: 'h', description: 'Prints this usage guide' },    
-        },
-        {
-            helpArg: 'help',
-            headerContentSections: [{ header: 'Generate Markdown', content: 'From the JSON file provided as an argument, transforms it into a suitable markdown to be uploaded to Anki.' }],
-            footerContentSections: [{ header: 'Notes', content: `Generate the JSON file using calibre command line.` }],
-        },
-        );
-    var data = JSON.parse(fs.readFileSync(args.sourceCalibreJson, 'utf-8'));
-    var mapAnkiIds = generateMapAnkiIds(args.markdownTargetPath);
+export function generateMarkdown(sourceCalibreJson: string, markdownTargetPath: string) {
+    var data = JSON.parse(fs.readFileSync(sourceCalibreJson, 'utf-8'));
+    var mapAnkiIds = generateMapAnkiIds(markdownTargetPath);
     var markdown: Array<string> = ['\n\n', '---\n\n', 'Deck: CalibreBooks\n\n', 'Tags: books calibre\n\n'];
     data.filter(book => (book.cover))
         .map((book) => appendBookMarkdown(markdown, book, mapAnkiIds));
     markdown.push( '---\n\n');
 
-    fs.writeFileSync(args.markdownTargetPath, markdown.join(''));
+    fs.writeFileSync(markdownTargetPath, markdown.join(''));
 }
-
-generateMarkdown();

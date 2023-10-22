@@ -5,6 +5,7 @@
   "main": "generateMarkdown.js",
   "scripts": {
     "build": "tsc",
+    "start": "node dist/index.js",
     "covers": "node dist/extractCalibreCovers.js",
     "markdown": "node dist/generateMarkdown.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,9 +14,11 @@
   "author": "Toni Tassani",
   "license": "ISC",
   "dependencies": {
+    "@types/shelljs": "^0.8.14",
     "date-fns": "^2.30.0",
     "fs-extra": "^11.1.1",
     "remove-accents": "^0.5.0",
+    "shelljs": "^0.8.5",
     "ts-command-line-args": "^2.5.1",
     "typescript": "^5.2.2"
   },

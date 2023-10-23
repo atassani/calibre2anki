@@ -107,6 +107,7 @@ export function generateMarkdown(sourceCalibreJson: string, markdownTargetPath: 
     var mapAnkiIds = generateMapAnkiIds(markdownTargetPath);
     var markdown: Array<string> = ['\n\n', '---\n\n', 'Deck: CalibreBooks\n\n', 'Tags: books calibre\n\n'];
     data.filter(book => (book.cover))
+        .sort((book1,book2) => (book1.id > book2.id ? 1 : -1)) 
         .map((book) => appendBookMarkdown(markdown, book, mapAnkiIds));
     markdown.push( '---\n\n');
 

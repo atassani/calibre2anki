@@ -5,6 +5,7 @@ import extractCovers from './extractCalibreCovers';
 import {cleanHtml, generateMarkdown} from './generateMarkdown';
 
 // npm run build && npm run start -- --sourceCalibreJson ./data/calibre_books.json --markdownTargetPath ./output/calibre_markdown.md --generateJson --cleanImages -i ./output/images/ --ankiLibrary /Users/toni.tassani/Library/Application\ Support/Anki2/User\ 1/collection.media/
+// npm run build && npm run start -- --sourceCalibreJson ./data/calibre_books.json --markdownTargetPath ./output/calibre_markdown.md --generateJson 
 interface calibre2ankiArguments {
     sourceCalibreJson: string;
     markdownTargetPath: string;
@@ -70,6 +71,10 @@ function deleteImageFiles(folder: string) {
     });
 }
 
+function pathToFile(path: string) : string {
+    return path.split('/').slice(0, -1).join('/');
+}
+
 function main() {
     // Sanitize arguments
     if (!isSanitizedArguments()) {
@@ -117,7 +122,7 @@ function main() {
         console.log('Adding to Anki using inka');
         exec('export DISABLE_QT5_COMPAT=1 && ' +
             'source /Users/toni.tassani/code/inka/venv/bin/activate && ' +
-            '/Users/toni.tassani/code/inka/venv/bin/inka collect --update-ids ' + args.markdownTargetPath);
+            '/Users/toni.tassani/code/inka/venv/bin/inka collect ' + pathToFile(args.markdownTargetPath));
     }
 }
 

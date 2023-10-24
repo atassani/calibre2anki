@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import { parse } from 'ts-command-line-args';
 import {exec} from 'shelljs';
 import extractCovers from './extractCalibreCovers';
-import {cleanHtml, generateMarkdown} from './generateMarkdown';
+import {generateMarkdown} from './generateMarkdown';
 
 // npm run build && npm run start -- --sourceCalibreJson ./data/calibre_books.json --markdownTargetPath ./output/calibre_markdown.md --generateJson --cleanImages -i ./output/images/ --ankiLibrary /Users/toni.tassani/Library/Application\ Support/Anki2/User\ 1/collection.media/
 // npm run build && npm run start -- --sourceCalibreJson ./data/calibre_books.json --markdownTargetPath ./output/calibre_markdown.md --generateJson 

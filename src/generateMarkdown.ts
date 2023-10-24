@@ -37,6 +37,7 @@ export function cleanHtml(html: string): string {
 
 function getBookFormatFromTags(tags: Array<string>): string {
     var formats = [];
+/*
     if (tags.some(t => t==='format:physical'))      formats.push({ 'key': '1', 'value': '📖 Physical'});
     if (tags.some(t => t==='format:audiobook'))     formats.push({ 'key': '2', 'value': '🔈 Audiobook'});
     if (tags.some(t => t==='format:kindle'))        formats.push({ 'key': '3', 'value': '📱 Kindle'});
@@ -47,9 +48,21 @@ function getBookFormatFromTags(tags: Array<string>): string {
     if (tags.some(t => t==='format:lent'))          formats.push({ 'key': '8', 'value': '🫴 Lent'});
     if (tags.some(t => t==='format:borrowed'))      formats.push({ 'key': '9', 'value': '🫴 Borrowed'});
     if (tags.some(t => t==='format:warning'))       formats.push({ 'key': '10', 'value': '⚠️ Warning'});
+*/
+    if (tags.some(t => t==='format:physical'))      formats.push({ 'key': '1', 'value': '![Physical](images/calibre_emblems_round_book.png)' });
+    if (tags.some(t => t==='format:audiobook'))     formats.push({ 'key': '2', 'value': '![Audiobook](images/calibre_emblems_audio.png)' });
+    if (tags.some(t => t==='format:kindle'))        formats.push({ 'key': '3', 'value': '![Kindle](images/calibre_emblems_kindle.png)' });
+    if (tags.some(t => t==='format:ebook'))         formats.push({ 'key': '4', 'value': '![eBook](images/calibre_emblems_downloaded_book_pirate.png)' });
+    if (tags.some(t => t==='format:ebookok'))       formats.push({ 'key': '5', 'value': '![eBook Ok](images/calibre_emblems_downloaded_book.png)' });
+    if (tags.some(t => t==='format:safari'))        formats.push({ 'key': '6', 'value': '![Safari](images/calibre_emblems_oreilly.png)' });
+    if (tags.some(t => t==='format:files'))         formats.push({ 'key': '7', 'value': '![Files](images/calibre_emblems_computer_files.png)' });
+    if (tags.some(t => t==='format:lent'))          formats.push({ 'key': '8', 'value': '![Lent](images/calibre_emblems_borrowed_trans.png)' });
+    if (tags.some(t => t==='format:borrowed'))      formats.push({ 'key': '9', 'value': '![Borrowed](images/calibre_emblems_borrowed_trans.png)' });
+    if (tags.some(t => t==='format:warning'))       formats.push({ 'key': '10', 'value': '![Warning](images/calibre_emblems_warning.png)' });
+    if (tags.some(t => t==='format:warning'))       formats.push({ 'key': '11', 'value': '![Stop](images/calibre_emblems_stop.png)' });
 
     formats = formats.sort( (n1, n2) => n1 - n2 );
-    return formats.map(f => f.value).join(', ');
+    return formats.map(f => f.value).join('');
 }
 
 function formatDate(dateStr: string, dateFormat: string): string {

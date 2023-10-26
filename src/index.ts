@@ -84,11 +84,11 @@ function main() {
     // Generate JSON
     if (args.generateJson) {
         console.log(`Generate JSON using calibredb to "${args.sourceCalibreJson}`);
-        exec(`calibredb list --fields=id,title,authors,pubdate,cover,last_modified,\*readdate,rating,tags,\*comments ` +
-             `-s '#read:"Yes"' --for-machine --sort-by last_modified > ${args.sourceCalibreJson}`);
+        exec(`calibredb list --fields=id,title,authors,pubdate,cover,last_modified,\*readdate,rating,tags,\*comments,\*readorder,\*read ` +
+             `-s '#read:"Yes" or (#readorder:>0.0)' --for-machine --sort-by last_modified > ${args.sourceCalibreJson}`);
     }
     
-    // Delete images
+    // Delete images, including emblems
     if (args.cleanImages) {
         if (args.imagesTargetPath) {
             console.log(`Deleting image files in "${args.imagesTargetPath}"`);
@@ -97,13 +97,17 @@ function main() {
                 console.log(`Deleting image files in "${args.ankiLibrary}"`);
                 deleteImageFiles(args.ankiLibrary);
             }
+            // Delete emblems
+            console.log(`Deleting emblems`);
+            exec(`rm "${args.ankiLibrary}/calibre_emblems_"*`);
+            exec(`rm "${args.imagesTargetPath}/calibre_emblems_"*`)
         }
         else {
             console.error("ERROR: To cleanImages, imagesTargetPath must be set");
         }
     }
     
-    // Generate images
+    // Generate images, including emblems
     if (args.imagesTargetPath) {
         console.log(`Extracting covers to "${args.imagesTargetPath}"`);
         extractCovers(args.sourceCalibreJson, args.imagesTargetPath);
@@ -111,6 +115,12 @@ function main() {
         const imageSize = '500x500';
         console.log(`Reducing image size to "${imageSize}", if bigger`);
         exec(`mogrify -resize ${imageSize}\\> ${args.imagesTargetPath}/*`);
+
+        // Copy emblems
+        console.log(`Copying emblems`);
+        exec(`cp /Users/toni.tassani/Library/Preferences/calibre/cc_icons/* ${args.imagesTargetPath}`);
+        exec(`find ${args.imagesTargetPath} -type f -not -name "Book_*" -not -name ".DS_Store" -exec rename -e 's/(.*)\\/(.*)/$1\\/calibre_emblems_$2/' {}  \\;`);
+        exec(`find ${args.imagesTargetPath} -type f -not -name "Book_*" -not -name ".DS_Store" -exec  mogrify -resize 25x25\\> {} \\;`);
     }
 
     // Generate markdown

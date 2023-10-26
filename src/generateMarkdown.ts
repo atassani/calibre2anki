@@ -35,7 +35,7 @@ export function cleanHtml(html: string): string {
     return newHtml;
 }
 
-function getBookFormatFromTags(tags: Array<string>): string {
+function getBookEmblems(isRead: boolean, readorder: number, tags: Array<string>): string {
     var formats = [];
 /*
     if (tags.some(t => t==='format:physical'))      formats.push({ 'key': '1', 'value': '📖 Physical'});
@@ -61,8 +61,18 @@ function getBookFormatFromTags(tags: Array<string>): string {
     if (tags.some(t => t==='format:warning'))       formats.push({ 'key': '10', 'value': '![Warning](images/calibre_emblems_warning.png)' });
     if (tags.some(t => t==='format:warning'))       formats.push({ 'key': '11', 'value': '![Stop](images/calibre_emblems_stop.png)' });
 
+    const readYNimage = isRead ? '![Read](images/calibre_emblems_book_read.png)' : '';
+
+    var readorderImage = '';
+    if      (readorder > 0.1  && readorder < 0.99) readorderImage = '![0](images/calibre_emblems_circle_0.png)';
+    else if (readorder > 0.99 && readorder < 2   ) readorderImage = '![1](images/calibre_emblems_circle_1.png)';
+    else if (readorder > 1.99 && readorder < 3   ) readorderImage = '![2](images/calibre_emblems_circle_2.png)';
+    else if (readorder > 2.99 && readorder < 4   ) readorderImage = '![3](images/calibre_emblems_circle_3.png)';
+    else if (readorder > 3.99 && readorder < 5   ) readorderImage = '![4](images/calibre_emblems_circle_4.png)';
+    else if (readorder > 4.99 && readorder < 6   ) readorderImage = '![4](images/calibre_emblems_circle_5.png)';
+
     formats = formats.sort( (n1, n2) => n1 - n2 );
-    return formats.map(f => f.value).join('');
+    return readYNimage + readorderImage + formats.map(f => f.value).join('');
 }
 
 function formatDate(dateStr: string, dateFormat: string): string {
@@ -76,10 +86,14 @@ function formatDate(dateStr: string, dateFormat: string): string {
 }
 
 function appendBookMarkdown(markdown: Array<string>, book: any, mapAnkiIds: Map<string, string>) {
-    var readDate = formatDate(book['*readdate'], 'MMM y');
-    var pubDate = formatDate(book.pubdate, 'y');
-    var rating = (book.rating) ? `${'★'.repeat(book.rating/2)}${'☆'.repeat(5 - book.rating/2)}` : '';
-    var comments = (book['*comments']) ? book['*comments'] : '';
+    const readDate = formatDate(book['*readdate'], 'MMM y');
+    const pubDate = formatDate(book.pubdate, 'y');
+    const rating = (book.rating) ? `${'★'.repeat(book.rating/2)}${'☆'.repeat(5 - book.rating/2)}` : '';
+    const comments = (book['*comments']) ? book['*comments'] : '';
+    const readorder = (book['*readorder']) ? book['*readorder'] : '';
+    const isRead = book['*read']==='True' ? true : false; 
+
+
 
     const ankiId = mapAnkiIds.get(book.id.toString());
     var bookMarkdown = 
@@ -87,7 +101,7 @@ function appendBookMarkdown(markdown: Array<string>, book: any, mapAnkiIds: Map<
 ${book.id}. Remember **${book.title.split(':', 1)}**?
 > _${book.authors}_
 > Published: ${pubDate}
-> Format: ${getBookFormatFromTags(book.tags)}
+> Format: ${getBookEmblems(isRead, readorder, book.tags)}
 > Read: ${readDate}
 > ${rating}
 >

@@ -13,13 +13,6 @@ The '>' parameter instructs `mogrify` to modify only bigger images.
 mogrify -resize 500x500\> /Home/toni.tassani/Downloads/calibre-books/*
 ```
 
-## Copy format icons
-cp /Users/toni.tassani/Library/Preferences/calibre/cc_icons/* output/images
-find output/images -type f -not -name "Book_*" -not -name ".DS_Store" -exec rename -e 's/(.*)\/(.*)/$1\/calibre_emblems_$2/' {}  \;
-find output/images/ -type f -not -name "Book_*" -not -name ".DS_Store" -exec  mogrify -resize 25x25\> {} \;  
-find output/images/ -type f -not -name "Book_*" -not -name ".DS_Store" -exec  identify {} \;  
-
-
 ## Metadata extraction for Anki
 
 Extracted with the following command:

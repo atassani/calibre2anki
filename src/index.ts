@@ -3,6 +3,7 @@ import { parse } from 'ts-command-line-args';
 import {exec} from 'shelljs';
 import extractCovers from './extractCalibreCovers';
 import {generateMarkdown} from './generateMarkdown';
+//import { execSync } from 'child_process';
 
 // npm run build && npm run start -- --sourceCalibreJson ./data/calibre_books.json --markdownTargetPath ./output/calibre_markdown.md --generateJson --cleanImages -i ./output/images/ --ankiLibrary /Users/toni.tassani/Library/Application\ Support/Anki2/User\ 1/collection.media/
 // npm run build && npm run start -- --sourceCalibreJson ./data/calibre_books.json --markdownTargetPath ./output/calibre_markdown.md --generateJson 
@@ -62,9 +63,7 @@ function deleteImageFiles(folder: string) {
                     //console.error('The file is a directory ' + file_path);
                 }else if (/^Book_[0-9]/.test(file) ) {
                     //console.log('Delete ' + file_path);
-                    fs.unlink(file_path, (error)=> {
-                        if (error) throw new Error('Could not delete file');
-                    });
+                    fs.unlinkSync(file_path);
                 }
             });
         });
@@ -84,8 +83,15 @@ function main() {
     // Generate JSON
     if (args.generateJson) {
         console.log(`Generate JSON using calibredb to "${args.sourceCalibreJson}`);
-        exec(`calibredb list --fields=id,title,authors,pubdate,cover,last_modified,\*readdate,rating,tags,\*comments,\*readorder,\*read ` +
-             `-s '#read:"Yes" or (#readorder:>0.0)' --for-machine --sort-by last_modified > ${args.sourceCalibreJson}`);
+        var error = '';
+        try { 
+            error = exec(`calibredb list --fields=id,title,authors,pubdate,cover,last_modified,\*readdate,rating,tags,\*comments,\*readorder,\*read ` +
+                 `-s '#read:"Yes" or (#readorder:>0.0)' --for-machine --sort-by last_modified > ${args.sourceCalibreJson}`, {silent: true})
+                 .stderr;
+        } catch(err) {
+            console.error('ERROR: Could not run calibredb. Is Calibre running?\n' + error);
+            return;
+        }
     }
     
     // Delete images, including emblems
@@ -99,8 +105,17 @@ function main() {
             }
             // Delete emblems
             console.log(`Deleting emblems`);
-            exec(`rm "${args.ankiLibrary}/calibre_emblems_"*`);
-            exec(`rm "${args.imagesTargetPath}/calibre_emblems_"*`)
+            var error = '';
+            try {
+                error = exec(`rm "${args.ankiLibrary}calibre_emblems_"*`, {silent: true}).stderr;
+            } catch(err) {
+                console.error(`ERROR: deleting "${args.ankiLibrary}calibre_emblems_"*\n${error}`);
+            }
+            try {
+                error = exec(`rm "${args.imagesTargetPath}calibre_emblems_"*`, {silent: true}).stderr;
+            } catch(err) {
+                console.log(`ERROR: deleting "${args.imagesTargetPath}calibre_emblems_"*\n${error}`);
+            }
         }
         else {
             console.error("ERROR: To cleanImages, imagesTargetPath must be set");
@@ -114,13 +129,32 @@ function main() {
         // Convert images using mogrify
         const imageSize = '500x500';
         console.log(`Reducing image size to "${imageSize}", if bigger`);
-        exec(`mogrify -resize ${imageSize}\\> ${args.imagesTargetPath}/*`);
+        var error = ''
+        try {
+            error = exec(`mogrify -resize ${imageSize}\\> ${args.imagesTargetPath}/*`, {silent: true}).stderr;
+        } catch(err) {
+            console.error('ERROR: Could not run mogrify to reduce images\n' + error);
+        }
+
+        // Add image borders if they are mostly white
+        console.log(`Add image borders if they are mostly white`);
+        var error = '';
+        try {
+            error = exec(`./border-images.sh`, {silent: true}).stderr;
+        } catch(err) {
+            console.error(`ERROR: adding border\n${error}`)
+        }
 
         // Copy emblems
         console.log(`Copying emblems`);
-        exec(`cp /Users/toni.tassani/Library/Preferences/calibre/cc_icons/* ${args.imagesTargetPath}`);
-        exec(`find ${args.imagesTargetPath} -type f -not -name "Book_*" -not -name ".DS_Store" -exec rename -e 's/(.*)\\/(.*)/$1\\/calibre_emblems_$2/' {}  \\;`);
-        exec(`find ${args.imagesTargetPath} -type f -not -name "Book_*" -not -name ".DS_Store" -exec  mogrify -resize 25x25\\> {} \\;`);
+        var error = '';
+        try {
+            error = exec(`cp /Users/toni.tassani/Library/Preferences/calibre/cc_icons/* ${args.imagesTargetPath}`, {silent: true}).stderr;
+            error = exec(`find ${args.imagesTargetPath} -type f -not -name "Book_*" -not -name ".DS_Store" -exec rename -e 's/(.*)\\/(.*)/$1\\/calibre_emblems_$2/' {}  \\;`, {silent:true}).stderr;
+            error = exec(`find ${args.imagesTargetPath} -type f -not -name "Book_*" -not -name ".DS_Store" -exec  mogrify -resize 25x25\\> {} \\;`, {silent: true}).stderr;
+        } catch(err) {
+            console.error('ERROR: copying emblems\n' + error);
+        }
     }
 
     // Generate markdown
@@ -130,9 +164,15 @@ function main() {
     // Invoke inka
     if (args.dontRunInka !== true) {
         console.log('Adding to Anki using inka');
-        exec('export DISABLE_QT5_COMPAT=1 && ' +
-            'source /Users/toni.tassani/code/inka/venv/bin/activate && ' +
-            '/Users/toni.tassani/code/inka/venv/bin/inka collect ' + pathToFile(args.markdownTargetPath));
+        try {
+            const {stdout, stderr, code} = exec('export DISABLE_QT5_COMPAT=1 && ' +
+                'source /Users/toni.tassani/code/inka/venv/bin/activate && ' +
+                '/Users/toni.tassani/code/inka/venv/bin/inka collect ' + pathToFile(args.markdownTargetPath), {silent: true}); 
+            console.log(stdout);
+            console.log(stderr);
+        } catch(err) {
+            console.error('ERROR: executing inka');
+        }
     }
 }
 

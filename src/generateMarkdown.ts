@@ -49,27 +49,27 @@ function getBookEmblems(isRead: boolean, readorder: number, tags: Array<string>)
     if (tags.some(t => t==='format:borrowed'))      formats.push({ 'key': '9', 'value': '🫴 Borrowed'});
     if (tags.some(t => t==='format:warning'))       formats.push({ 'key': '10', 'value': '⚠️ Warning'});
 */
-    if (tags.some(t => t==='format:physical'))      formats.push({ 'key': '1', 'value': '![Physical](images/calibre_emblems_round_book.png)' });
-    if (tags.some(t => t==='format:audiobook'))     formats.push({ 'key': '2', 'value': '![Audiobook](images/calibre_emblems_audio.png)' });
-    if (tags.some(t => t==='format:kindle'))        formats.push({ 'key': '3', 'value': '![Kindle](images/calibre_emblems_kindle.png)' });
-    if (tags.some(t => t==='format:ebook'))         formats.push({ 'key': '4', 'value': '![eBook](images/calibre_emblems_downloaded_book_pirate.png)' });
-    if (tags.some(t => t==='format:ebookok'))       formats.push({ 'key': '5', 'value': '![eBook Ok](images/calibre_emblems_downloaded_book.png)' });
-    if (tags.some(t => t==='format:safari'))        formats.push({ 'key': '6', 'value': '![Safari](images/calibre_emblems_oreilly.png)' });
-    if (tags.some(t => t==='format:files'))         formats.push({ 'key': '7', 'value': '![Files](images/calibre_emblems_computer_files.png)' });
-    if (tags.some(t => t==='format:lent'))          formats.push({ 'key': '8', 'value': '![Lent](images/calibre_emblems_borrowed_trans.png)' });
-    if (tags.some(t => t==='format:borrowed'))      formats.push({ 'key': '9', 'value': '![Borrowed](images/calibre_emblems_borrowed_trans.png)' });
-    if (tags.some(t => t==='format:warning'))       formats.push({ 'key': '10', 'value': '![Warning](images/calibre_emblems_warning.png)' });
-    if (tags.some(t => t==='format:warning'))       formats.push({ 'key': '11', 'value': '![Stop](images/calibre_emblems_stop.png)' });
+    if (tags.some(t => t==='format:physical'))      formats.push({ 'key': '1', 'value': '![Physical](./images/calibre_emblems_round_book.png)' });
+    if (tags.some(t => t==='format:audiobook'))     formats.push({ 'key': '2', 'value': '![Audiobook](./images/calibre_emblems_audio.png)' });
+    if (tags.some(t => t==='format:kindle'))        formats.push({ 'key': '3', 'value': '![Kindle](./images/calibre_emblems_kindle.png)' });
+    if (tags.some(t => t==='format:ebook'))         formats.push({ 'key': '4', 'value': '![eBook](./images/calibre_emblems_downloaded_book_pirate.png)' });
+    if (tags.some(t => t==='format:ebookok'))       formats.push({ 'key': '5', 'value': '![eBook Ok](./images/calibre_emblems_downloaded_book.png)' });
+    if (tags.some(t => t==='format:safari'))        formats.push({ 'key': '6', 'value': '![Safari](./images/calibre_emblems_oreilly.png)' });
+    if (tags.some(t => t==='format:files'))         formats.push({ 'key': '7', 'value': '![Files](./images/calibre_emblems_computer_files.png)' });
+    if (tags.some(t => t==='format:lent'))          formats.push({ 'key': '8', 'value': '![Lent](./images/calibre_emblems_borrowed_trans.png)' });
+    if (tags.some(t => t==='format:borrowed'))      formats.push({ 'key': '9', 'value': '![Borrowed](./images/calibre_emblems_borrowed_trans.png)' });
+    if (tags.some(t => t==='format:warning'))       formats.push({ 'key': '10', 'value': '![Warning](./images/calibre_emblems_warning.png)' });
+    if (tags.some(t => t==='format:warning'))       formats.push({ 'key': '11', 'value': '![Stop](./images/calibre_emblems_stop.png)' });
 
-    const readYNimage = isRead ? '![Read](images/calibre_emblems_book_read.png)' : '';
+    const readYNimage = isRead ? '![Read](./images/calibre_emblems_book_read.png)' : '';
 
     var readorderImage = '';
-    if      (readorder > 0.1  && readorder < 0.99) readorderImage = '![0](images/calibre_emblems_circle_0.png)';
-    else if (readorder > 0.99 && readorder < 2   ) readorderImage = '![1](images/calibre_emblems_circle_1.png)';
-    else if (readorder > 1.99 && readorder < 3   ) readorderImage = '![2](images/calibre_emblems_circle_2.png)';
-    else if (readorder > 2.99 && readorder < 4   ) readorderImage = '![3](images/calibre_emblems_circle_3.png)';
-    else if (readorder > 3.99 && readorder < 5   ) readorderImage = '![4](images/calibre_emblems_circle_4.png)';
-    else if (readorder > 4.99 && readorder < 6   ) readorderImage = '![4](images/calibre_emblems_circle_5.png)';
+    if      (readorder > 0.1  && readorder < 0.99) readorderImage = '![0](./images/calibre_emblems_circle_0.png)';
+    else if (readorder > 0.99 && readorder < 2   ) readorderImage = '![1](./images/calibre_emblems_circle_1.png)';
+    else if (readorder > 1.99 && readorder < 3   ) readorderImage = '![2](./images/calibre_emblems_circle_2.png)';
+    else if (readorder > 2.99 && readorder < 4   ) readorderImage = '![3](./images/calibre_emblems_circle_3.png)';
+    else if (readorder > 3.99 && readorder < 5   ) readorderImage = '![4](./images/calibre_emblems_circle_4.png)';
+    else if (readorder > 4.99 && readorder < 6   ) readorderImage = '![4](./images/calibre_emblems_circle_5.png)';
 
     formats = formats.sort( (n1, n2) => n1 - n2 );
     return readYNimage + readorderImage + formats.map(f => f.value).join('');
@@ -96,16 +96,23 @@ function appendBookMarkdown(markdown: Array<string>, book: any, mapAnkiIds: Map<
 
 
     const ankiId = mapAnkiIds.get(book.id.toString());
+    const shortBookTitle: string = book.title.split(':', 1)[0];
+    var shortestBookTitle: string =shortBookTitle.split('(', 1)[0];
+    shortestBookTitle =shortestBookTitle.split('[', 1)[0];
     var bookMarkdown = 
 `${(ankiId) ? '\n' + ankiId : ''}
-${book.id}. Remember **${book.title.split(':', 1)}**?
+${book.id}. Remember **${shortBookTitle}**?
 > _${book.authors}_
+> <div class="compact">
 > Published: ${pubDate}
-> Format: ${getBookEmblems(isRead, readorder, book.tags)}
-> Read: ${readDate}
-> ${rating}
 >
-> ![book.title](./images/${buildFileName(book.id, book.title)})
+> Format: ${getBookEmblems(isRead, readorder, book.tags)}
+>
+> Read: ${readDate}
+>
+> ${rating}</div>
+>
+> ![${shortestBookTitle}](./images/${buildFileName(book.id, book.title)})
 >
 > ${cleanHtml(comments)}
 `;
@@ -137,6 +144,5 @@ export function generateMarkdown(sourceCalibreJson: string, markdownTargetPath: 
         .sort((book1,book2) => (book1.id > book2.id ? 1 : -1)) 
         .map((book) => appendBookMarkdown(markdown, book, mapAnkiIds));
     markdown.push( '---\n\n');
-
     fs.writeFileSync(markdownTargetPath, markdown.join(''));
 }

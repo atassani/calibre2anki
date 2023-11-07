@@ -92,9 +92,6 @@ function appendBookMarkdown(markdown: Array<string>, book: any, mapAnkiIds: Map<
     const comments = (book['*comments']) ? book['*comments'] : '';
     const readorder = (book['*readorder']) ? book['*readorder'] : '';
     const isRead = book['*read']==='True' ? true : false; 
-
-
-
     const ankiId = mapAnkiIds.get(book.id.toString());
     const shortBookTitle: string = book.title.split(':', 1)[0];
     var shortestBookTitle: string =shortBookTitle.split('(', 1)[0];
@@ -103,14 +100,12 @@ function appendBookMarkdown(markdown: Array<string>, book: any, mapAnkiIds: Map<
 `${(ankiId) ? '\n' + ankiId : ''}
 ${book.id}. Remember **${shortBookTitle}**?
 > _${book.authors}_
-> <div class="compact">
+> <div class="book">
 > Published: ${pubDate}
->
 > Format: ${getBookEmblems(isRead, readorder, book.tags)}
->
 > Read: ${readDate}
->
-> ${rating}</div>
+> <div class="rating">${rating}</div>
+> </div>
 >
 > ![${shortestBookTitle}](./images/${buildFileName(book.id, book.title)})
 >

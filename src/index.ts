@@ -74,13 +74,7 @@ function pathToFile(path: string) : string {
     return path.split('/').slice(0, -1).join('/');
 }
 
-function main() {
-    // Sanitize arguments
-    if (!isSanitizedArguments()) {
-        return;
-    }
-
-    // Generate JSON
+async function generateJson() {
     if (args.generateJson) {
         console.log(`Generate JSON using calibredb to "${args.sourceCalibreJson}`);
         var error = '';
@@ -93,8 +87,9 @@ function main() {
             return;
         }
     }
-    
-    // Delete images, including emblems
+}
+
+async function deleteImages() {
     if (args.cleanImages) {
         if (args.imagesTargetPath) {
             console.log(`Deleting image files in "${args.imagesTargetPath}"`);
@@ -121,8 +116,9 @@ function main() {
             console.error("ERROR: To cleanImages, imagesTargetPath must be set");
         }
     }
-    
-    // Generate images, including emblems
+}
+
+async function generateImages() {
     if (args.imagesTargetPath) {
         console.log(`Extracting covers to "${args.imagesTargetPath}"`);
         extractCovers(args.sourceCalibreJson, args.imagesTargetPath);
@@ -137,6 +133,7 @@ function main() {
         }
 
         // Add image borders if they are mostly white
+        /*
         console.log(`Add image borders if they are mostly white`);
         var error = '';
         try {
@@ -144,6 +141,7 @@ function main() {
         } catch(err) {
             console.error(`ERROR: adding border\n${error}`)
         }
+        */
 
         // Copy emblems
         console.log(`Copying emblems`);
@@ -156,12 +154,9 @@ function main() {
             console.error('ERROR: copying emblems\n' + error);
         }
     }
+}
 
-    // Generate markdown
-    console.log(`Generate markdown file in ${args.markdownTargetPath}`);
-    generateMarkdown(args.sourceCalibreJson, args.markdownTargetPath);
-
-    // Invoke inka
+async function invokeAnki() {
     if (args.dontRunInka !== true) {
         console.log('Adding to Anki using inka');
         try {
@@ -174,6 +169,28 @@ function main() {
             console.error('ERROR: executing inka');
         }
     }
+}
+
+async function main() {
+    // Sanitize arguments
+    if (!isSanitizedArguments()) {
+        return;
+    }
+
+    // Generate JSON
+    await generateJson();
+    
+    // Delete images, including emblems
+    await deleteImages();
+    
+    // Generate images, including emblems
+    await generateImages();
+
+    // Generate markdown
+    await generateMarkdown(args.sourceCalibreJson, args.markdownTargetPath);
+
+    // Invoke inka
+    await invokeAnki();
 }
 
 main();

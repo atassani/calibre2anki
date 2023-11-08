@@ -131,10 +131,13 @@ function generateMapAnkiIds(markdownFile: string): Map<string, string> {
     return map;
 }
 
-export function generateMarkdown(sourceCalibreJson: string, markdownTargetPath: string) {
+export async function generateMarkdown(sourceCalibreJson: string, markdownTargetPath: string) {
     var data = JSON.parse(fs.readFileSync(sourceCalibreJson, 'utf-8'));
     var mapAnkiIds = generateMapAnkiIds(markdownTargetPath);
     var markdown: Array<string> = ['\n\n', '---\n\n', 'Deck: CalibreBooks\n\n', 'Tags: books calibre\n\n'];
+
+    console.log(`Generate markdown file in ${markdownTargetPath}`);
+    
     data.filter(book => (book.cover))
         .sort((book1,book2) => (book1.id > book2.id ? 1 : -1)) 
         .map((book) => appendBookMarkdown(markdown, book, mapAnkiIds));

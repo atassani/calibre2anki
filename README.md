@@ -35,3 +35,23 @@ lent
 physical
 safari
 warning
+
+## Styles
+The following styles were added:
+
+```css
+.book p {
+  margin: 0 0 0 0;
+	padding: 0;
+}
+
+.book img {
+  vertical-align:middle;
+  height: 20px;
+}
+
+.book .rating {
+  padding: 10px 0 0 0;
+	display: inline-bloc
+}
+```

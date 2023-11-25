@@ -1,10 +1,19 @@
 # calibre2anki
 
+## Run
+
+```bash
+npm run build && npm run start -- --sourceCalibreJson ./data/calibre_books.json --markdownTargetPath ./output/calibre_markdown.md --generateJson --cleanImages -i ./output/images/ --ankiLibrary /Users/toni.tassani/Library/Application\ Support/Anki2/User\ 1/collection.media/
+```
+
+## Prepare
+
 npm init -y
 npm install typescript
 npm install --save-dev @types/node
 
 ## Convert images
+
 With ImageMagick, replacing in-place with `mogrify` instead of using `convert`, we reduce files to 500x500 max, not modifying smaller images.
 
 The '>' parameter instructs `mogrify` to modify only bigger images.
@@ -37,12 +46,13 @@ safari
 warning
 
 ## Styles
+
 The following styles were added:
 
 ```css
 .book p {
   margin: 0 0 0 0;
-	padding: 0;
+  padding: 0;
 }
 
 .book img {
@@ -52,6 +62,6 @@ The following styles were added:
 
 .book .rating {
   padding: 10px 0 0 0;
-	display: inline-bloc
+  display: inline-bloc
 }
 ```

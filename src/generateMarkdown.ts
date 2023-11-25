@@ -99,7 +99,7 @@ function appendBookMarkdown(markdown: Array<string>, book: any, mapAnkiIds: Map<
     var shortestBookTitle: string =shortBookTitle.split('(', 1)[0];
     shortestBookTitle = shortestBookTitle.split('[', 1)[0];
     const beforeBook = isRead ? 'Remember' : 'You haven\'t read';
-    const afterBook = isRead ? '?' : '. Remember?';
+    const afterBook = isRead ? '?' : '. Want to read?';
     var bookMarkdown = 
 `${(ankiId) ? '\n' + ankiId : ''}
 ${book.id}. ${beforeBook} **${shortBookTitle}**${subtitle}${afterBook}

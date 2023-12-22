@@ -8,6 +8,8 @@ npm run build && npm run start -- --sourceCalibreJson ./data/calibre_books.json 
 
 ## Prepare
 
+mkdir data
+mkdir -p output/images
 npm init -y
 npm install typescript
 npm install --save-dev @types/node

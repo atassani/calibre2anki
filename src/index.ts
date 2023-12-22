@@ -6,7 +6,12 @@ import {generateMarkdown} from './generateMarkdown';
 //import { execSync } from 'child_process';
 
 // npm run build && npm run start -- --sourceCalibreJson ./data/calibre_books.json --markdownTargetPath ./output/calibre_markdown.md --generateJson --cleanImages -i ./output/images/ --ankiLibrary /Users/toni.tassani/Library/Application\ Support/Anki2/User\ 1/collection.media/
+// npm run build && npm run start -- --sourceCalibreJson ./data/calibre_books.json --markdownTargetPath ./output/calibre_markdown.md --generateJson --cleanImages -i ./output/images/ --ankiLibrary /home/toni/.local/share/Anki2/User\ 1/collection.media/
 // npm run build && npm run start -- --sourceCalibreJson ./data/calibre_books.json --markdownTargetPath ./output/calibre_markdown.md --generateJson 
+
+//const emblemsFolder:string = '/Users/toni.tassani/Library/Preferences/calibre/cc_icons';
+const emblemsFolder:string = '/home/toni/.config/calibre/cc_icons';
+
 interface calibre2ankiArguments {
     sourceCalibreJson: string;
     markdownTargetPath: string;
@@ -147,7 +152,7 @@ async function generateImages() {
         console.log(`Copying emblems`);
         var error = '';
         try {
-            error = exec(`cp /Users/toni.tassani/Library/Preferences/calibre/cc_icons/* ${args.imagesTargetPath}`, {silent: true}).stderr;
+            error = exec(`cp ${emblemsFolder}/* ${args.imagesTargetPath}`, {silent: true}).stderr;
             error = exec(`find ${args.imagesTargetPath} -type f -not -name "Book_*" -not -name ".DS_Store" -exec rename -e 's/(.*)\\/(.*)/$1\\/calibre_emblems_$2/' {}  \\;`, {silent:true}).stderr;
             error = exec(`find ${args.imagesTargetPath} -type f -not -name "Book_*" -not -name ".DS_Store" -exec  mogrify -resize 25x25\\> {} \\;`, {silent: true}).stderr;
         } catch(err) {

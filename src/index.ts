@@ -11,6 +11,10 @@ import {generateMarkdown} from './generateMarkdown';
 
 //const emblemsFolder:string = '/Users/toni.tassani/Library/Preferences/calibre/cc_icons';
 const emblemsFolder:string = '/home/toni/.config/calibre/cc_icons';
+//const inkaCommand:string = 'export DISABLE_QT5_COMPAT=1 && ' +
+    'source /Users/toni.tassani/code/inka/venv/bin/activate && ' +
+    '/Users/toni.tassani/code/inka/venv/bin/inka ';
+const inkaCommand:string = '/home/toni/.local/bin/inka ';
 
 interface calibre2ankiArguments {
     sourceCalibreJson: string;
@@ -165,9 +169,7 @@ async function invokeAnki() {
     if (args.dontRunInka !== true) {
         console.log('Adding to Anki using inka');
         try {
-            const {stdout, stderr, code} = exec('export DISABLE_QT5_COMPAT=1 && ' +
-                'source /Users/toni.tassani/code/inka/venv/bin/activate && ' +
-                '/Users/toni.tassani/code/inka/venv/bin/inka collect ' + pathToFile(args.markdownTargetPath), {silent: true}); 
+            const {stdout, stderr, code} = exec(`${inkaCommand} collect ` + pathToFile(args.markdownTargetPath), {silent: true}); 
             console.log(stdout);
             console.log(stderr);
         } catch(err) {
@@ -195,7 +197,7 @@ async function main() {
     await generateMarkdown(args.sourceCalibreJson, args.markdownTargetPath);
 
     // Invoke inka
-    await invokeAnki();
+    //await invokeAnki();
 }
 
 main();

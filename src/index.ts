@@ -156,7 +156,7 @@ async function generateImages() {
     }
 }
 
-async function invokeAnki() {
+function invokeAnki() {
     if (args.dontRunInka !== true) {
         console.log('Adding to Anki using inka');
         try {
@@ -190,7 +190,7 @@ async function main() {
     await generateMarkdown(args.sourceCalibreJson, args.markdownTargetPath);
 
     // Invoke inka
-    await invokeAnki();
+    invokeAnki();
 }
 
 main();

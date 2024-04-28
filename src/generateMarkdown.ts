@@ -96,8 +96,8 @@ function appendBookMarkdown(markdown: Array<string>, book: any, mapAnkiIds: Map<
     const shortBookTitle: string = book.title.split(':', 1)[0];
     var subtitle: string = book.title.split(':', 2)[1];
     subtitle = (subtitle) ? ': _'+subtitle.substring(1)+'_' : ''; 
-    var shortestBookTitle: string =shortBookTitle.split('(', 1)[0];
-    shortestBookTitle = shortestBookTitle.split('[', 1)[0];
+    var shortestBookTitle: string =shortBookTitle.split('(', 1)[0].trim();
+    shortestBookTitle = shortestBookTitle.split('[', 1)[0].trim();
     const beforeBook = isRead ? 'Remember' : 'You haven\'t read';
     const afterBook = isRead ? '?' : '. Want to read?';
     var bookMarkdown = 

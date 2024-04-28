@@ -25,6 +25,8 @@ TODO
 
 ## Prepare
 
+mkdir data
+mkdir -p output/images
 npm init -y
 npm install typescript
 npm install --save-dev @types/node

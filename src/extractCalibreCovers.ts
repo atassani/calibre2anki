@@ -14,7 +14,7 @@ async function extractCalibreCovers(sourceCalibreJson: string, imagesTargetPath:
     await new Promise( resolve => {
         data.filter(b => (b.cover)).map(b => copyFile(
             b.cover
-            ,imagesTargetPath+buildFileName(b.id, b.title)
+            ,imagesTargetPath+'/'+buildFileName(b.id, b.title)
         ));
         resolve('extractCalibreCovers');
         }

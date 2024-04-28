@@ -3,7 +3,24 @@
 ## Run
 
 ```bash
-npm run build && npm run start -- --sourceCalibreJson ./data/calibre_books.json --markdownTargetPath ./output/calibre_markdown.md --generateJson --cleanImages -i ./output/images/ --ankiLibrary /Users/toni.tassani/Library/Application\ Support/Anki2/User\ 1/collection.media/
+./calibre2anki.sh
+```
+
+To rectify Inka:
+```bash
+inka collect -u output
+``
+
+## Synchronize files with OSMC - Kodi
+
+```bash
+rsync -avzhP ~/CalibreLibrary osmc@osmc:/media/Movies
+```
+
+Once in OSMC, ssh osmc@osmc and run:
+
+```bash
+TODO
 ```
 
 ## Prepare

@@ -9,7 +9,7 @@
 To rectify Inka:
 ```bash
 inka collect -u output
-``
+```
 
 ## Synchronize files with OSMC - Kodi
 
@@ -17,11 +17,18 @@ inka collect -u output
 rsync -avzhP ~/CalibreLibrary osmc@osmc:/media/Movies
 ```
 
-Once in OSMC, ssh osmc@osmc and run:
+Once in OSMC, ssh osmc@osmc and run the following to synchronize with Google Drive:
 
 ```bash
-TODO
+rclone sync -P --fast-list --transfers=32 --modify-window=10s --buffer-size=512M /media/Movies/CalibreLibrary gdrive:_for_ubuntu_/Calibre\ Library
 ```
+
+Same command with `--dry-run` to check what will be done.
+```bash
+rclone sync --dry-run -P --fast-list --transfers=32 --modify-window=10s --buffer-size=512M /media/Movies/CalibreLibrary gdrive:_for_ubuntu_/Calibre\ Library
+```
+
+Rclone was configure with `rclone config`.
 
 ## Prepare
 

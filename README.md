@@ -17,10 +17,10 @@ inka collect -u output
 rsync -avzhP ~/CalibreLibrary osmc@osmc:/media/Movies
 ```
 
-Once in OSMC, ssh osmc@osmc and run the following to synchronize with Google Drive:
+Run the following to execute in OSMC and synchronize with Google Drive:
 
 ```bash
-rclone sync -P --fast-list --transfers=32 --modify-window=10s --buffer-size=512M /media/Movies/CalibreLibrary gdrive:_for_ubuntu_/Calibre\ Library
+ssh osmc@osmc "rclone sync -P --fast-list --transfers=32 --modify-window=10s --buffer-size=512M /media/Movies/CalibreLibrary gdrive:_for_ubuntu_/Calibre\ Library"
 ```
 
 Same command with `--dry-run` to check what will be done.

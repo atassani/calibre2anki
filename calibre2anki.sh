@@ -36,5 +36,5 @@ find $IMAGES_TARGET_PATH -type f -not -name "Book_*" -not -name ".DS_Store" -exe
 echo "** Invoke Inka to add to Anki..."
 export DISABLE_QT5_COMPAT=1
 source ${INKA_PATH}/activate
-${INKA_PATH}/inka collect $MARKDOWN_TARGET_PATH
-#${INKA_PATH}/inka collect --update-ids $MARKDOWN_TARGET_PATH
+${INKA_PATH}/inka2 collect $MARKDOWN_TARGET_PATH
+#${INKA_PATH}/inka2 collect --update-ids $MARKDOWN_TARGET_PATH

@@ -3,7 +3,7 @@ SOURCE_CALIBRE_JSON=./data/calibre_books.json
 MARKDOWN_TARGET_PATH=./output/calibre_markdown.md
 IMAGES_TARGET_PATH=./output/images
 ANKI_LIBRARY_PATH="/Users/toni.tassani/Library/Application Support/Anki2/User 1/collection.media"
-INKA_PATH=/Users/toni.tassani/code/inka/venv/bin
+INKA_PATH=/Users/toni.tassani/code/inka2/venv/bin
 EMBLEMS_SOURCE_PATH=/Users/toni.tassani/Library/Preferences/calibre/cc_icons
 
 echo "** Generating Json from Calibre..."

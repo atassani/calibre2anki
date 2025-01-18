@@ -5,6 +5,8 @@
 ```bash
 ./calibre2anki.sh
 ```
+                            
+TypeScript is transpiled every time in the script with `npm run build`. 
 
 To rectify Inka:
 ```bash
@@ -32,11 +34,13 @@ Rclone was configure with `rclone config`.
 
 ## Prepare
 
+```bash
 mkdir data
 mkdir -p output/images
 npm init -y
 npm install typescript
 npm install --save-dev @types/node
+```
 
 ## Convert images
 
@@ -60,16 +64,17 @@ Could use `-s '#readdate:">=2022"'`.
 
 Formats (with format: at the beginning):
 
-audiobook
-borrowed
-ebook
-ebookok
-files
-kindle
-lent
-physical
-safari
-warning
+- audiobook
+- borrowed
+- ebook
+- ebookok
+- files
+- kindle
+- lent
+- physical
+- safari
+- warning
+- idea
 
 ## Styles
 

@@ -92,14 +92,15 @@ function appendBookMarkdown(markdown: Array<string>, book: any, mapAnkiIds: Map<
     const comments = (book['*comments']) ? book['*comments'] : '';
     const readorder = (book['*readorder']) ? book['*readorder'] : '';
     const isRead: boolean = book['*read'];
+    const isAudiobook: boolean = book.title.toLowerCase().includes('(audiobook)');
     const ankiId = mapAnkiIds.get(book.id.toString());
     const shortBookTitle: string = book.title.split(':', 1)[0];
     var subtitle: string = book.title.split(':', 2)[1];
     subtitle = (subtitle) ? ': _'+subtitle.substring(1)+'_' : ''; 
     var shortestBookTitle: string =shortBookTitle.split('(', 1)[0].trim();
     shortestBookTitle = shortestBookTitle.split('[', 1)[0].trim();
-    const beforeBook = isRead ? 'Remember' : 'You haven\'t read';
-    const afterBook = isRead ? '?' : '. Want to read?';
+    const beforeBook = isRead ? 'Remember' : (isAudiobook ? 'You haven\'t listened to' : 'You haven\'t read');
+    const afterBook = isRead ? '?' : (isAudiobook ? '. Want to listen?' : '. Want to read?');
     var bookMarkdown = 
 `${(ankiId) ? '\n' + ankiId : ''}
 ${book.id}. ${beforeBook} **${shortBookTitle}**${subtitle}${afterBook}

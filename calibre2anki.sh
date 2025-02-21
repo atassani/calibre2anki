@@ -5,10 +5,10 @@ IMAGES_TARGET_PATH=./output/images
 ANKI_LIBRARY_PATH="/Users/toni.tassani/Library/Application Support/Anki2/User 1/collection.media"
 INKA_PATH=/Users/toni.tassani/code/inka2/venv/bin
 EMBLEMS_SOURCE_PATH=/Users/toni.tassani/Library/Preferences/calibre/cc_icons
+CALIBRE_LIBRARY=/Users/toni.tassani/CalibreLibrary/
 
 echo "** Generating Json from Calibre..."
-calibredb list --fields=id,title,authors,pubdate,cover,last_modified,\*readdate,rating,tags,\*comments,\*readorder,\*read \
-  -s '#read:"Yes" or (#readorder:>0.0)' --for-machine --sort-by last_modified > $SOURCE_CALIBRE_JSON
+calibredb --with-library=$CALIBRE_LIBRARY list --fields=id,title,authors,pubdate,cover,last_modified,\*readdate,rating,tags,\*comments,\*readorder,\*read \ -s '#read:"Yes" or (#readorder:>0.0)' --for-machine --sort-by last_modified > $SOURCE_CALIBRE_JSON
 
 echo "** Deleting images..."
 rm -f "${IMAGES_TARGET_PATH}"/Book_[0-9]*

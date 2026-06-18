@@ -136,10 +136,10 @@ function generateMapAnkiIds(markdownFile: string): Map<string, string> {
     return map;
 }
 
-export async function generateMarkdown(sourceCalibreJson: string, markdownTargetPath: string) {
+export async function generateMarkdown(sourceCalibreJson: string, markdownTargetPath: string, deckName: string = 'Calibre Books') {
     var data = JSON.parse(fs.readFileSync(sourceCalibreJson, 'utf-8'));
     var mapAnkiIds = generateMapAnkiIds(markdownTargetPath);
-    var markdown: Array<string> = ['\n\n', '---\n\n', 'Deck: Calibre Books\n\n', 'Tags: books calibre\n\n'];
+    var markdown: Array<string> = ['\n\n', '---\n\n', `Deck: ${deckName}\n\n`, 'Tags: books calibre\n\n'];
 
     console.log(`Generate markdown file in ${markdownTargetPath}`);
     

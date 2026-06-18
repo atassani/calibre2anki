@@ -10,6 +10,7 @@ interface calibre2ankiArguments {
     sourceCalibreJson: string;
     markdownTargetPath: string;
     imagesTargetPath?: string;
+    deckName?: string;
     help?: boolean;
 }
 
@@ -18,7 +19,8 @@ const args = parse<calibre2ankiArguments>(
         sourceCalibreJson: { type: String, optional: undefined, alias: 'j', description: 'Full path to the calibre.json file' },
         markdownTargetPath: { type: String, optional: undefined, alias: 'm', description: 'Full path to filename to store the markdown' },
         imagesTargetPath: { type: String, optional: true, alias: 'i', description: 'Path to the location to store the cover images' },
-        help: { type: Boolean, optional: true, alias: 'h', description: 'Prints this usage guide' },    
+        deckName: { type: String, optional: true, alias: 'd', description: 'Anki deck name written into the Deck: header' },
+        help: { type: Boolean, optional: true, alias: 'h', description: 'Prints this usage guide' },
     },
     {
         helpArg: 'help',
@@ -51,7 +53,7 @@ async function main() {
     await generateImages();
 
     // Generate markdown
-    await generateMarkdown(args.sourceCalibreJson, args.markdownTargetPath);
+    await generateMarkdown(args.sourceCalibreJson, args.markdownTargetPath, args.deckName);
 }
 
 main();

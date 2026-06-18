@@ -3,6 +3,7 @@ set -e
 SOURCE_CALIBRE_JSON=./data/calibre_books.json
 MARKDOWN_TARGET_PATH=./output/calibre_markdown.md
 IMAGES_TARGET_PATH=./output/images
+ANKI_DECK_NAME="Calibre Books"
 ANKI_LIBRARY_PATH="/Users/toni.tassani/Library/Application Support/Anki2/User 1/collection.media"
 INKA_PATH=/Users/toni.tassani/code/inka2/venv/bin
 EMBLEMS_SOURCE_PATH=/Users/toni.tassani/Library/Preferences/calibre/cc_icons
@@ -27,7 +28,8 @@ echo "** Running the npm script to build the Markdown file and extract cover ima
 npm run start -- \
   --sourceCalibreJson $SOURCE_CALIBRE_JSON \
   --markdownTargetPath $MARKDOWN_TARGET_PATH \
-  --imagesTargetPath $IMAGES_TARGET_PATH
+  --imagesTargetPath $IMAGES_TARGET_PATH \
+  --deckName "$ANKI_DECK_NAME"
 
 echo "** Resizing cover images to 500x500 if bigger..."
 mogrify -resize 500x500\> $IMAGES_TARGET_PATH/* || true
